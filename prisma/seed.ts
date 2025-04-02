@@ -10,28 +10,24 @@ async function main() {
   // Создаем категории
   const burgers = await prisma.category.create({
     data: {
-      id: 'burgers',
       name: 'Бургеры',
     },
   });
 
   const snacks = await prisma.category.create({
     data: {
-      id: 'snacks',
       name: 'Снэки',
     },
   });
 
   const drinks = await prisma.category.create({
     data: {
-      id: 'drinks',
       name: 'Напитки',
     },
   });
 
   const desserts = await prisma.category.create({
     data: {
-      id: 'desserts',
       name: 'Десерты',
     },
   });

@@ -6,8 +6,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProductService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async findAll() {
+  public async findAll(category: string | undefined) {
+    const where = category ? { categoryId: category } : {};
     return await this.prisma.product.findMany({
+      where,
       include: {
         items: true,
       },
