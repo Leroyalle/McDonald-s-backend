@@ -10,6 +10,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { CourseModule } from './course/course.module';
 import { CourseItemModule } from './course-item/course-item.module';
 import { UserProgressModule } from './user-progress/user-progress.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UserProgressModule } from './user-progress/user-progress.module';
     CourseModule,
     CourseItemModule,
     UserProgressModule,
+    ProductModule,
   ],
   providers: [JwtAuthGuard],
 })
