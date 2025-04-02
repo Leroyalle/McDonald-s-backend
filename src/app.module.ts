@@ -7,10 +7,8 @@ import { EmailModule } from './email/email.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { CourseModule } from './course/course.module';
-import { CourseItemModule } from './course-item/course-item.module';
-import { UserProgressModule } from './user-progress/user-progress.module';
 import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -29,10 +27,8 @@ import { ProductModule } from './product/product.module';
         fallthrough: false,
       },
     }),
-    CourseModule,
-    CourseItemModule,
-    UserProgressModule,
     ProductModule,
+    CategoryModule,
   ],
   providers: [JwtAuthGuard],
 })

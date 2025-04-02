@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./__generated__"
 }
 
 datasource db {
@@ -43,7 +42,9 @@ model Product {
   isNew           Boolean @default(false)
   bonusMultiplier Int     @default(1)
 
-  items ProductItem[]
+  items      ProductItem[]
+  category   Category      @relation(fields: [categoryId], references: [id])
+  categoryId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,6 +60,17 @@ model ProductItem {
 
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id String @id @default(uuid())
+
+  name String
+
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
