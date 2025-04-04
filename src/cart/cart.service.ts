@@ -3,6 +3,7 @@ import { CreateCartDto } from './dto/create-cart.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CartItemService } from './cart-item/cart-item.service';
 import { RemoveCartItemDto } from './dto/remove-cart-item.dto';
+import { UpdateQuantityDto } from './dto/update-quantity.dto';
 
 @Injectable()
 export class CartService {
@@ -103,6 +104,30 @@ export class CartService {
       where: {
         id: findCart.id,
       },
+    });
+  }
+
+  public async updateQuantity(data: UpdateQuantityDto, userId: string) {
+    const findCart = await this.findOne(userId);
+
+    if (!findCart) {
+      throw new NotFoundException('Cart not found');
+    }
+
+    const findCartItem = await this.cartItemService.findOne(
+      findCart.id,
+      data.productItemId,
+    );
+
+    if (!findCartItem) {
+      throw new NotFoundException('Cart item not found');
+    }
+    if (data.quantity === 0) {
+      return await this.cartItemService.remove(findCartItem.id);
+    }
+    return await this.cartItemService.updateQuantity({
+      id: findCartItem.id,
+      quantity: data.quantity,
     });
   }
 }

@@ -60,6 +60,11 @@ export class ProductItemService {
       return findProductItem;
     }
 
+    console.log({
+      ...findProductItem,
+      quantity: findCartItem.quantity,
+      isAddToCart: !!findCartItem,
+    });
     return {
       ...findProductItem,
       quantity: findCartItem.quantity,
