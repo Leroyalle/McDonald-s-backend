@@ -17,6 +17,7 @@ model User {
   isVerified Boolean @default(false)
 
   verificationCode VerificationCode[]
+  cart             Cart[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,8 +44,8 @@ model Product {
   bonusMultiplier Int     @default(1)
 
   items      ProductItem[]
-  category   Category      @relation(fields: [categoryId], references: [id])
   categoryId String
+  category   Category      @relation(fields: [categoryId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -53,13 +54,15 @@ model Product {
 model ProductItem {
   id String @id @default(uuid())
 
-  weight   String
+  size     Sizes
+  weight   Int
   image    String
   price    Int
   quantity Int    @default(1)
 
   productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -74,4 +77,35 @@ model Category {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Cart {
+  id String @id @default(uuid())
+
+  items  CartItem[]
+  userId String
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+  id String @id @default(uuid())
+
+  productItem   ProductItem @relation(fields: [productItemId], references: [id])
+  productItemId String
+  cart          Cart        @relation(fields: [cartId], references: [id])
+  cartId        String
+
+  quantity Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Sizes {
+  SMALL
+  MEDIUM
+  LARGE
 }

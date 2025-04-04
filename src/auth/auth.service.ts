@@ -29,7 +29,12 @@ export class AuthService {
       throw new ConflictException('User already exists');
     }
 
-    const createdUser = await this.userService.create(createAuthDto);
+    const createUser = {
+      ...createAuthDto,
+      name: createAuthDto.name || '#User',
+    };
+
+    const createdUser = await this.userService.create(createUser);
 
     const createdCode = await this.emailService.createVerificationCode(
       createdUser.id,
