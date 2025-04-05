@@ -55,24 +55,45 @@ export class OrderService {
       payment_method_data: {
         type: PaymentMethodsEnum.yoo_money,
       },
-      capture: false,
+      capture: true,
       confirmation: {
         type: 'redirect',
-        return_url: this.configService.get<string>('ALLOWED_ORIGIN') as string,
+        return_url:
+          (this.configService.get<string>('ALLOWED_ORIGIN') as string) +
+          '?paid',
       },
       metadata: {
         order_id: order.id,
       },
     };
 
-    console.log('paymentData', paymentData);
-
     const createdPayment =
       await this.yookassaService.createPayment(paymentData);
 
-    console.log('createdPayment', createdPayment);
+    if (createdPayment.confirmation?.type === 'redirect') {
+      return {
+        paymentUrl: createdPayment.confirmation.confirmation_url,
+      };
+    } else {
+      throw new ConflictException('Payment type is not supported');
+    }
+  }
 
-    return createdPayment;
+  async capturePayment(paymentId: string) {
+    const order = await this.prisma.order.findFirst({
+      where: {
+        id: paymentId,
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    const capturedPayment =
+      await this.yookassaService.capturePayment(paymentId);
+
+    return capturedPayment;
   }
 
   findAll() {
