@@ -26,7 +26,7 @@ export class CartController {
 
   @Get()
   findOne(@UserId() userId: string) {
-    return this.cartService.findOne(userId);
+    return this.cartService.getCart(userId);
   }
 
   @Patch('quantity')

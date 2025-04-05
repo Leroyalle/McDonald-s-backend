@@ -55,6 +55,16 @@ export class CartService {
     });
   }
 
+  public async getCart(userId: string) {
+    const findCart = await this.findOne(userId);
+
+    if (!findCart) {
+      throw new NotFoundException('Cart not found');
+    }
+
+    return findCart;
+  }
+
   public async findOne(userId: string) {
     return await this.prisma.cart.findFirst({
       where: {
@@ -63,7 +73,14 @@ export class CartService {
       include: {
         items: {
           include: {
-            productItem: true,
+            productItem: {
+              include: {
+                product: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
       },
