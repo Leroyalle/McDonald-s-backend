@@ -18,6 +18,7 @@ model User {
 
   verificationCode VerificationCode[]
   cart             Cart[]
+  Order            Order[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -103,8 +104,31 @@ model CartItem {
   updatedAt DateTime @updatedAt
 }
 
+model Order {
+  id String @id @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  totalAmount Int
+  status      PaymentStatus
+  paymentId   String?
+
+  items Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Sizes {
   SMALL
   MEDIUM
   LARGE
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  CANCELLED
+  WAITING_FOR_CAPTURE
 }

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -10,6 +10,9 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
+import { YookassaModule } from 'nestjs-yookassa';
+import { getYookassaConfig } from './config/yookassa.config';
 
 @Module({
   imports: [
@@ -28,9 +31,15 @@ import { CartModule } from './cart/cart.module';
         fallthrough: false,
       },
     }),
+    YookassaModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: getYookassaConfig,
+      inject: [ConfigService],
+    }),
     ProductModule,
     CategoryModule,
     CartModule,
+    OrderModule,
   ],
   providers: [JwtAuthGuard],
 })

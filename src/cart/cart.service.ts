@@ -19,11 +19,6 @@ export class CartService {
       },
     });
 
-    // TODO: проверить что такого товара нет в корзине +
-    // если есть - увеличить количество +
-    // сделать отдельный ресурс для cartItem +
-    // проверить отдавать ли cartItem вместе с продуктом
-
     if (!findCart) {
       return await this.prisma.cart.create({
         data: {
